@@ -1,26 +1,23 @@
-import os
 import requests
 import cowsay
 from bs4 import BeautifulSoup
 from datetime import datetime
 from time import sleep
 from dotenv import load_dotenv
+from config.configs import SETTINGS
 from send.enviar_email import envio
+from colorama import init, Fore
 
 
 
 # settings
 load_dotenv()
-
-config = {
-    "USER":os.getenv("USER", None),
-    "PASSWORD":os.getenv("PASSWORD", None),
-}
+init()
 
 
-user = config.get("USER")
-password = config.get("PASSWORD")
 
+user = SETTINGS.get("USER")
+password = SETTINGS.get("PASSWORD")
 
 
 
@@ -47,8 +44,8 @@ for game in games:
         if day == today_br:
             mensagem = f'{team1} x {team2} -- {day} {time}'
             envio(user, password, mensagem)
-            cowsay.tux(mensagem)
+            cowsay.tux(Fore.GREEN + mensagem + Fore.RESET)
             break
         else:
-            print(f'Data: {today_br} - não tem jogo')
+            print(f'Data: {today_br} - ' + Fore.YELLOW + 'não tem jogo' + Fore.RESET)
             sleep(1)
